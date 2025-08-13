@@ -90,3 +90,19 @@ else:
                 st.subheader("Odpowiedź")
                 ans = answer(q, hits)
                 st.write(ans)
+
+
+
+# --- Diagnostyka URL (lokalnie) ---
+import streamlit as st
+with st.expander("🔎 Diagnostyka URL (podgląd ekstrakcji)"):
+    test_url = st.text_input("Wklej URL do testu", "")
+    if st.button("Pobierz i pokaż tekst"):
+        from rag.loader import fetch_url
+        if test_url:
+            txt = fetch_url(test_url)
+            if not txt:
+                st.error("❌ Brak tekstu (SSL/403/JS-only?)")
+            else:
+                st.success(f"✅ Pobrano {len(txt)} znaków.")
+                st.write(txt[:3000] + ("…" if len(txt) > 3000 else ""))
